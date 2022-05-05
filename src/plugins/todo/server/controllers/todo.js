@@ -64,22 +64,4 @@ module.exports = {
       ctx.throw(500, err);
     }
   },
-
-  async getSettings(ctx) {
-    console.log("######### getSettings ##########");
-    try {
-      ctx.body = await strapi.plugin("todo").service("todo").getSettings();
-    } catch (err) {
-      ctx.throw(500, err);
-    }
-  },
-  async setSettings(ctx) {
-    const { body } = ctx.request;
-    try {
-      await strapi.plugin("todo").service("todo").setSettings(body);
-      ctx.body = await strapi.plugin("todo").service("todo").getSettings();
-    } catch (err) {
-      ctx.throw(500, err);
-    }
-  },
 };
