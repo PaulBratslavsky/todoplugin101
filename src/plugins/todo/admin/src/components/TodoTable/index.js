@@ -39,16 +39,15 @@ function TodoCheckbox({ value, checkboxID, callback, disabled }) {
   );
 }
 
-function TodoInput({ value}) {
-  const [inputValue, setInputValue] = useState(value || "");
+function TodoInput({ value, onChange }) {
   return (
     <TextInput
       type="text"
       aria-label="todo-input"
       name="todo-input"
-      error={inputValue.length > 40 ? "Text should be less than 40 characters" : ""}
-      onChange={(e) => setInputValue(e.target.value)}
-      value={inputValue}
+      error={value.length > 40 ? "Text should be less than 40 characters" : ""}
+      onChange={onChange}
+      value={value}
     />
   );
 }
@@ -88,10 +87,9 @@ export default function TodoTable({
       </Thead>
       <Tbody>
         {todoData.map((todo) => {
+          const [inputValue, setInputValue] = useState(todo.name);
           const [isEdit, setIsEdit] = useState(false);
-          async function handleEdit() {
-            setIsEdit(false);
-          }
+
           return (
             <Tr key={todo.id}>
               <Td>
@@ -99,7 +97,10 @@ export default function TodoTable({
               </Td>
               <Td>
                 {isEdit ? (
-                  <TodoInput value={todo.name}/>
+                  <TodoInput
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                  />
                 ) : (
                   <Typography textColor="neutral800">{todo.name}</Typography>
                 )}
@@ -115,7 +116,7 @@ export default function TodoTable({
               <Td>
                 {isEdit ? (
                   <Flex style={{ justifyContent: "end" }}>
-                    <Button onClick={handleEdit}>Save</Button>
+                    <Button onClick={() => editTodo(todo.id, { name: inputValue })}>Save</Button>
                   </Flex>
                 ) : (
                   <Flex style={{ justifyContent: "end" }}>

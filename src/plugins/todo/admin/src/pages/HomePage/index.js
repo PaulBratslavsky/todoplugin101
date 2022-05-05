@@ -20,6 +20,7 @@ const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
 
   const fetchData = async () => {
+    if (isLoading === false) setIsLoading(true);
     const todoCount = await todoRequests.getTodoCount();
     const todoData = await todoRequests.getAllTodos();
     setTodoCount(todoCount);
@@ -27,8 +28,8 @@ const HomePage = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
+  useEffect(async () => {
+    await fetchData();
   }, []);
 
   async function toggleTodo(data) {
@@ -37,22 +38,20 @@ const HomePage = () => {
 
   async function deleteTodo(data) {
     await todoRequests.deleteTodo(data.id);
-    fetchData();
+    await fetchData();
   }
 
-  async function editTodo(data) {
-    await todoRequests.editTodo(data.id, data);
-    fetchData();
+  async function editTodo(id, data) {
+    await todoRequests.editTodo(id, data);
+    await fetchData();
   }
 
   async function addTodo(data) {
     await todoRequests.addTodo(data);
-    fetchData();
+    await fetchData();
   }
 
   if (isLoading) return <LoadingIndicatorPage />;
-
-  console.log("todoData", todoData);
 
   return (
     <>
@@ -62,7 +61,7 @@ const HomePage = () => {
         as="h2"
       />
       <ContentLayout>
-        {todoCount === 0 && (
+        {todoCount === 0 ? (
           <EmptyStateLayout
             icon={<Illo />}
             content="You don't have any todos yet..."
@@ -76,8 +75,7 @@ const HomePage = () => {
               </Button>
             }
           />
-        )}
-        {todoCount > 0 && (
+        ) : (
           <>
             <Box background="neutral0" hasRadius={true} shadow="filterShadow">
               <Flex justifyContent="center" padding={8}>
@@ -97,15 +95,14 @@ const HomePage = () => {
                 todoData={todoData}
                 toggleTodo={toggleTodo}
                 deleteTodo={deleteTodo}
+                editTodo={editTodo}
                 setShowModal={setShowModal}
               />
             </Box>
           </>
         )}
-        {showModal && (
-          <TodoModal setShowModal={setShowModal} addTodo={addTodo} />
-        )}
       </ContentLayout>
+      {showModal && <TodoModal setShowModal={setShowModal} addTodo={addTodo} />}
     </>
   );
 };
