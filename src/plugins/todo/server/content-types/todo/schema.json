@@ -27,6 +27,10 @@
     "isDone": {
       "type": "boolean",
       "default": false
+    },
+    "related": {
+      "type": "relation",
+      "relation": "morphToOne"
     }
   }
 }
