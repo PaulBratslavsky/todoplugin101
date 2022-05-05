@@ -59,6 +59,24 @@ module.exports = [
     },
   },
 
+  {
+    method: 'GET',
+    path: '/settings',
+    handler: 'todo.getSettings',
+    config: {
+      policies: [],
+      auth: false,
+    },
+  },
+  {
+    method: 'POST',
+    path: '/settings',
+    handler: 'todo.setSettings',
+    config: {
+      policies: [],
+      auth: false,
+    },
+  },
   
 
 ];
