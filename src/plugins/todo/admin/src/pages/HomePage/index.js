@@ -3,27 +3,31 @@ import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 
 import todoRequests from "../../api/todo";
 import { Box } from "@strapi/design-system/Box";
+import { Button } from "@strapi/design-system/Button";
 import { Flex } from "@strapi/design-system/Flex";
 import { Typography } from "@strapi/design-system/Typography";
 import { EmptyStateLayout } from "@strapi/design-system/EmptyStateLayout";
 import { BaseHeaderLayout, ContentLayout } from "@strapi/design-system/Layout";
-import TodoTable from "../../components/Table";
+import TodoTable from "../../components/TodoTable";
+import TodoModal from "../../components/TodoModal";
 import { Illo } from "../../components/Illo";
+import Plus from "@strapi/icons/Plus";
 
 const HomePage = () => {
   const [todoCount, setTodoCount] = useState(0);
   const [todoData, setTodoData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => { 
-    const fetchData = async () => {
-      const todoCount = await todoRequests.getTodoCount();
-      const todoData = await todoRequests.getAllTodos();
-      setTodoCount(todoCount);
-      setTodoData(todoData);
-      setIsLoading(false);
-    };
+  const fetchData = async () => {
+    const todoCount = await todoRequests.getTodoCount();
+    const todoData = await todoRequests.getAllTodos();
+    setTodoCount(todoCount);
+    setTodoData(todoData);
+    setIsLoading(false);
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -32,9 +36,18 @@ const HomePage = () => {
   }
 
   async function deleteTodo(data) {
-    console.log(data);
     await todoRequests.deleteTodo(data.id);
-    setTodoData(todoData.filter((todo) => todo.id !== data.id));
+    fetchData();
+  }
+
+  async function editTodo(data) {
+    await todoRequests.editTodo(data.id, data);
+    fetchData();
+  }
+
+  async function addTodo(data) {
+    await todoRequests.addTodo(data);
+    fetchData();
   }
 
   if (isLoading) return <LoadingIndicatorPage />;
@@ -53,6 +66,15 @@ const HomePage = () => {
           <EmptyStateLayout
             icon={<Illo />}
             content="You don't have any todos yet..."
+            action={
+              <Button
+                onClick={() => setShowModal(true)}
+                variant="secondary"
+                startIcon={<Plus />}
+              >
+                Add your first todo
+              </Button>
+            }
           />
         )}
         {todoCount > 0 && (
@@ -71,13 +93,17 @@ const HomePage = () => {
               padding={8}
               style={{ marginTop: "10px" }}
             >
-              <TodoTable 
-                todoData={todoData} 
-                toggleTodo={toggleTodo} 
+              <TodoTable
+                todoData={todoData}
+                toggleTodo={toggleTodo}
                 deleteTodo={deleteTodo}
+                setShowModal={setShowModal}
               />
             </Box>
           </>
+        )}
+        {showModal && (
+          <TodoModal setShowModal={setShowModal} addTodo={addTodo} />
         )}
       </ContentLayout>
     </>

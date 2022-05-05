@@ -8,6 +8,15 @@ const todoRequests = {
     return data;
   },
 
+  addTodo: async (data) => {
+    const response = await request(`/todo/create`, {
+      method: 'POST',
+      body: { data: data },
+
+    });
+    return response;
+  },
+
   getAllTodos: async () => {
     const data = await request(`/todo/find`, {
       method: 'GET',
