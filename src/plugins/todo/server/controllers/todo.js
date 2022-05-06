@@ -18,8 +18,6 @@ module.exports = {
   },
 
   async delete(ctx) {
-    if (!ctx.params.id) return null;
-
     try {
       ctx.body = await strapi
         .plugin("todo")
@@ -53,8 +51,6 @@ module.exports = {
   },
 
   async toggle(ctx) {
-    if (!ctx.params.id) return null;
-
     try {
       ctx.body = await strapi
         .plugin("todo")

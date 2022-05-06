@@ -1,15 +1,19 @@
 {
   "kind": "collectionType",
+
   "collectionName": "todos",
+
   "info": {
     "singularName": "todo",
     "pluralName": "todos",
     "displayName": "Todo"
   },
+
   "options": {
     "draftAndPublish": false,
     "comment": ""
   },
+
   "pluginOptions": {
     "content-manager": {
       "visible": true
@@ -18,19 +22,19 @@
       "visible": true
     }
   },
+
   "attributes": {
+
     "name": {
       "type": "string",
       "required": true,
       "maxLength": 40
     },
+
     "isDone": {
       "type": "boolean",
       "default": false
-    },
-    "related": {
-      "type": "relation",
-      "relation": "morphToOne"
     }
+    
   }
 }

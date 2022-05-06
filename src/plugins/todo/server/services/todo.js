@@ -66,6 +66,5 @@ module.exports = ({ strapi }) => ({
     await pluginStore.set({ key: 'settings', value });
     return pluginStore.get({ key: 'settings' });
   },
-
-
+  
 });
