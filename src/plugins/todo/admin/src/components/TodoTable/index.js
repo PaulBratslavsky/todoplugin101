@@ -60,87 +60,99 @@ export default function TodoTable({
   setShowModal,
 }) {
   return (
-    <Table
-      colCount={4}
-      rowCount={10}
-      footer={
-        <TFooter onClick={() => setShowModal(true)} icon={<Plus />}>
-          Add a todo
-        </TFooter>
-      }
+    <Box
+      background="neutral0"
+      hasRadius={true}
+      shadow="filterShadow"
+      padding={8}
+      style={{ marginTop: "10px" }}
     >
-      <Thead>
-        <Tr>
-          <Th>
-            <Typography variant="sigma">ID</Typography>
-          </Th>
-          <Th>
-            <Typography variant="sigma">Todo</Typography>
-          </Th>
-          <Th>
-            <Typography variant="sigma">Status</Typography>
-          </Th>
-          <Th>
-            <VisuallyHidden>Actions</VisuallyHidden>
-          </Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {todoData.map((todo) => {
-          const [inputValue, setInputValue] = useState(todo.name);
-          const [isEdit, setIsEdit] = useState(false);
+      <Table
+        colCount={4}
+        rowCount={10}
+        footer={
+          <TFooter onClick={() => setShowModal(true)} icon={<Plus />}>
+            Add a todo
+          </TFooter>
+        }
+      >
+        <Thead>
+          <Tr>
+            <Th>
+              <Typography variant="sigma">ID</Typography>
+            </Th>
+            <Th>
+              <Typography variant="sigma">Todo</Typography>
+            </Th>
+            <Th>
+              <Typography variant="sigma">Status</Typography>
+            </Th>
+            <Th>
+              <VisuallyHidden>Actions</VisuallyHidden>
+            </Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {todoData.map((todo) => {
+            const [inputValue, setInputValue] = useState(todo.name);
+            const [isEdit, setIsEdit] = useState(false);
 
-          return (
-            <Tr key={todo.id}>
-              <Td>
-                <Typography textColor="neutral800">{todo.id}</Typography>
-              </Td>
-              <Td>
-                {isEdit ? (
-                  <TodoInput
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                  />
-                ) : (
-                  <Typography textColor="neutral800">{todo.name}</Typography>
-                )}
-              </Td>
-              <Td>
-                <TodoCheckbox
-                  value={todo.isDone}
-                  checkboxID={todo.id}
-                  callback={toggleTodo}
-                  disabled={isEdit}
-                />
-              </Td>
-              <Td>
-                {isEdit ? (
-                  <Flex style={{ justifyContent: "end" }}>
-                    <Button onClick={() => editTodo(todo.id, { name: inputValue })}>Save</Button>
-                  </Flex>
-                ) : (
-                  <Flex style={{ justifyContent: "end" }}>
-                    <IconButton
-                      onClick={() => setIsEdit(true)}
-                      label="Edit"
-                      noBorder
-                      icon={<Pencil />}
+            return (
+              <Tr key={todo.id}>
+                <Td>
+                  <Typography textColor="neutral800">{todo.id}</Typography>
+                </Td>
+                <Td>
+                  {isEdit ? (
+                    <TodoInput
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
                     />
-                    <Box paddingLeft={1}>
+                  ) : (
+                    <Typography textColor="neutral800">{todo.name}</Typography>
+                  )}
+                </Td>
+                <Td>
+                  <TodoCheckbox
+                    value={todo.isDone}
+                    checkboxID={todo.id}
+                    callback={toggleTodo}
+                    disabled={isEdit}
+                  />
+                </Td>
+                <Td>
+                  {isEdit ? (
+                    <Flex style={{ justifyContent: "end" }}>
+                      <Button
+                        onClick={() => editTodo(todo.id, { name: inputValue })}
+                      >
+                        Save
+                      </Button>
+                    </Flex>
+                  ) : (
+                    <Flex style={{ justifyContent: "end" }}>
                       <IconButton
-                        onClick={() => deleteTodo(todo)}
-                        label="Delete"
+                        onClick={() => setIsEdit(true)}
+                        label="Edit"
                         noBorder
-                        icon={<Trash />}
+                        icon={<Pencil />}
                       />
-                    </Box>
-                  </Flex>
-                )}
-              </Td>
-            </Tr>
-          );
-        })}
-      </Tbody>
-    </Table>
+                      <Box paddingLeft={1}>
+                        <IconButton
+                          onClick={() => deleteTodo(todo)}
+                          label="Delete"
+                          noBorder
+                          icon={<Trash />}
+                        />
+                      </Box>
+                    </Flex>
+                  )}
+                </Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+    </Box>
   );
 }

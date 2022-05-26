@@ -2,16 +2,17 @@ import React, { memo, useState, useEffect } from "react";
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 
 import todoRequests from "../../api/todo";
-import { Box } from "@strapi/design-system/Box";
-import { Button } from "@strapi/design-system/Button";
-import { Flex } from "@strapi/design-system/Flex";
-import { Typography } from "@strapi/design-system/Typography";
+
 import { EmptyStateLayout } from "@strapi/design-system/EmptyStateLayout";
+import { Button } from "@strapi/design-system/Button";
+import Plus from "@strapi/icons/Plus";
+
+import { Illo } from "../../components/Illo";
+
 import { BaseHeaderLayout, ContentLayout } from "@strapi/design-system/Layout";
 import TodoTable from "../../components/TodoTable";
 import TodoModal from "../../components/TodoModal";
-import { Illo } from "../../components/Illo";
-import Plus from "@strapi/icons/Plus";
+import TodoCount from "../../components/TodoCount";
 
 const HomePage = () => {
   const [todoCount, setTodoCount] = useState(0);
@@ -77,28 +78,14 @@ const HomePage = () => {
           />
         ) : (
           <>
-            <Box background="neutral0" hasRadius={true} shadow="filterShadow">
-              <Flex justifyContent="center" padding={8}>
-                <Typography variant="alpha">
-                  You have a total of {todoCount} todos 🚀
-                </Typography>
-              </Flex>
-            </Box>
-            <Box
-              background="neutral0"
-              hasRadius={true}
-              shadow="filterShadow"
-              padding={8}
-              style={{ marginTop: "10px" }}
-            >
-              <TodoTable
-                todoData={todoData}
-                toggleTodo={toggleTodo}
-                deleteTodo={deleteTodo}
-                editTodo={editTodo}
-                setShowModal={setShowModal}
-              />
-            </Box>
+            <TodoCount count={todoCount} />
+            <TodoTable
+              todoData={todoData}
+              toggleTodo={toggleTodo}
+              deleteTodo={deleteTodo}
+              editTodo={editTodo}
+              setShowModal={setShowModal}
+            />
           </>
         )}
       </ContentLayout>
